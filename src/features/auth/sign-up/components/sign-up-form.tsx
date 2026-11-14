@@ -15,10 +15,10 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { PasswordInput } from "@/features/auth/components/password-input";
 import { ApiError } from "../api";
 import { type SignUpData, type SignUpInput, signUpSchema } from "../schema";
 import { useSignUp } from "../use-sign-up";
-import { PasswordInput } from "./password-input";
 
 const defaultValues: SignUpInput = {
   firstName: "",

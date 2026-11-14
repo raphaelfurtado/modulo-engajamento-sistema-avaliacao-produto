@@ -1,7 +1,9 @@
 // Tipos do banco usados pelo cliente Supabase.
+// Contrato compartilhado entre features (plans/_orquestracao.md): só o orquestrador edita.
 // Quando o projeto crescer, gere automaticamente com:
 //   npx supabase gen types typescript --project-id <project-ref> > src/server/db/types.ts
 
+/* accounts: supabase/migrations/20261114000000_create_accounts.sql */
 export type AccountRow = {
   id: string;
   first_name: string;
@@ -20,6 +22,41 @@ export type AccountInsert = Omit<
 > &
   Partial<Pick<AccountRow, "active" | "created_at" | "updated_at">>;
 
+/* products: supabase/migrations/20261114010000_create_products.sql */
+export type ProductRow = {
+  id: string;
+  name: string;
+  description: string | null;
+  image_url: string;
+  external_link: string;
+  /** Mantido como boolean conforme a spec (D2). Sem uso na interface por enquanto. */
+  score: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ProductInsert = Omit<
+  ProductRow,
+  "description" | "score" | "created_at" | "updated_at"
+> &
+  Partial<
+    Pick<ProductRow, "description" | "score" | "created_at" | "updated_at">
+  >;
+
+/* products_feedbacks: supabase/migrations/20261114020000_create_products_feedbacks.sql */
+export type ProductFeedbackRow = {
+  id: string;
+  product_id: string;
+  created_by: string;
+  /** Inteiro de 0 a 5 (D1). */
+  score: number;
+  comment: string;
+  created_at: string;
+};
+
+export type ProductFeedbackInsert = Omit<ProductFeedbackRow, "created_at"> &
+  Partial<Pick<ProductFeedbackRow, "created_at">>;
+
 export type Database = {
   public: {
     Tables: {
@@ -28,6 +65,33 @@ export type Database = {
         Insert: AccountInsert;
         Update: Partial<AccountInsert>;
         Relationships: [];
+      };
+      products: {
+        Row: ProductRow;
+        Insert: ProductInsert;
+        Update: Partial<ProductInsert>;
+        Relationships: [];
+      };
+      products_feedbacks: {
+        Row: ProductFeedbackRow;
+        Insert: ProductFeedbackInsert;
+        Update: Partial<ProductFeedbackInsert>;
+        Relationships: [
+          {
+            foreignKeyName: "products_feedbacks_product_id_fkey";
+            columns: ["product_id"];
+            isOneToOne: false;
+            referencedRelation: "products";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "products_feedbacks_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "accounts";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
     Views: Record<never, never>;

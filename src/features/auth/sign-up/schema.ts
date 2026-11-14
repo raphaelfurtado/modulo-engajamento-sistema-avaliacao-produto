@@ -45,11 +45,5 @@ export type SignUpResponse = {
   createdAt: string;
 };
 
-/** Formato de erro retornado pela API. */
-export type ApiErrorBody = {
-  error: {
-    code: string;
-    message: string;
-    fields?: Record<string, string[] | undefined>;
-  };
-};
+/** Formato de erro da API: veja `@/lib/api/errors`. */
+export type { ApiErrorBody } from "@/lib/api/errors";

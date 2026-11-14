@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s | Prova",
   },
   description:
-    "Avaliações de produtos feitas por quem comprou e usou, com nota de 0 a 10.",
+    "Avaliações de produtos feitas por quem comprou e usou, com nota de 0 a 5.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

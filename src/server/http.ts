@@ -2,7 +2,7 @@ import "server-only";
 import { TRPCError } from "@trpc/server";
 import { getHTTPStatusCodeFromError } from "@trpc/server/http";
 import { ZodError, z } from "zod";
-import type { ApiErrorBody } from "@/features/auth/sign-up/schema";
+import type { ApiErrorBody } from "@/lib/api/errors";
 
 export function jsonError(
   status: number,

@@ -1,15 +1,7 @@
-import type { ApiErrorBody, SignUpInput, SignUpResponse } from "./schema";
+import { ApiError, NETWORK_ERROR_MESSAGE, toApiError } from "@/lib/api/errors";
+import type { SignUpInput, SignUpResponse } from "./schema";
 
-export class ApiError extends Error {
-  constructor(
-    public readonly status: number,
-    message: string,
-    public readonly fields?: ApiErrorBody["error"]["fields"],
-  ) {
-    super(message);
-    this.name = "ApiError";
-  }
-}
+export { ApiError };
 
 export async function signUpRequest(
   input: SignUpInput,
@@ -22,18 +14,13 @@ export async function signUpRequest(
       body: JSON.stringify(input),
     });
   } catch {
-    throw new ApiError(
-      0,
-      "Sem conexão com o servidor. Verifique sua internet.",
-    );
+    throw new ApiError(0, NETWORK_ERROR_MESSAGE);
   }
 
   if (response.status === 201) return response.json();
 
-  const body = (await response.json().catch(() => null)) as ApiErrorBody | null;
-  throw new ApiError(
-    response.status,
-    body?.error.message ?? "Não foi possível criar sua conta. Tente novamente.",
-    body?.error.fields,
+  throw await toApiError(
+    response,
+    "Não foi possível criar sua conta. Tente novamente.",
   );
 }
