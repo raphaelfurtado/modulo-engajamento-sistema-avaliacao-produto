@@ -1,0 +1,137 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Modo escuro segue a preferência do sistema operacional. */
+@custom-variant dark (@media (prefers-color-scheme: dark));
+
+@theme inline {
+  --font-sans: var(--font-schibsted);
+  --font-heading: var(--font-schibsted);
+  --font-hand: var(--font-pen);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ink: var(--ink);
+  --color-pauta: var(--pauta);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+/*
+ * Paleta Prova
+ * Sulfite #F5F6F8 · Grafite #2B2F36 · Caneta azul #2340B0
+ * Caneta vermelha #C62828 · Pauta #CBD5E6 · Cinza nota #5D6470
+ */
+:root {
+  --background: #f5f6f8; /* Sulfite */
+  --foreground: #2b2f36; /* Grafite */
+  --card: #ffffff;
+  --card-foreground: #2b2f36;
+  --popover: #ffffff;
+  --popover-foreground: #2b2f36;
+  --primary: #2b2f36;
+  --primary-foreground: #f5f6f8;
+  --secondary: #e9ecf1;
+  --secondary-foreground: #2b2f36;
+  --muted: #e9ecf1;
+  --muted-foreground: #5d6470; /* Cinza nota */
+  --accent: #e9ecf1;
+  --accent-foreground: #2b2f36;
+  --destructive: #c62828; /* Caneta vermelha: só erros */
+  --border: #d9dfe9;
+  --input: #8792a8; /* borda de campo com contraste 3:1 */
+  --ring: #2340b0;
+  --ink: #2340b0; /* Caneta azul: só anotações (nota, foco, links) */
+  --pauta: #cbd5e6; /* Linhas de caderno */
+  --radius: 0.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #181a1e;
+    --foreground: #e9ebef;
+    --card: #20232a;
+    --card-foreground: #e9ebef;
+    --popover: #20232a;
+    --popover-foreground: #e9ebef;
+    --primary: #e9ebef;
+    --primary-foreground: #181a1e;
+    --secondary: #2a2e36;
+    --secondary-foreground: #e9ebef;
+    --muted: #2a2e36;
+    --muted-foreground: #a3aab7;
+    --accent: #2a2e36;
+    --accent-foreground: #e9ebef;
+    --destructive: #ff7a72;
+    --border: #343a46;
+    --input: #6b7487;
+    --ring: #8ea4ff;
+    --ink: #8ea4ff;
+    --pauta: #2f3a52;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    color-scheme: light dark;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Linhas de caderno: uma pauta a cada 2rem, alinhada ao leading-8 do texto. */
+@utility ruled-paper {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(2rem - 1px),
+    var(--pauta) calc(2rem - 1px),
+    var(--pauta) 2rem
+  );
+}
+
+/* Traço de caneta: o SVG se desenha uma única vez ao carregar. */
+@keyframes ink-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@utility ink-stroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: ink-draw 700ms cubic-bezier(0.65, 0, 0.35, 1) 350ms forwards;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
