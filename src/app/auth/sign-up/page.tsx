@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AuthSwitch } from "@/features/auth/components/auth-switch";
 import { GradedReviewSample } from "@/features/auth/components/graded-review-sample";
 import { SignUpForm } from "@/features/auth/sign-up/components/sign-up-form";
 
@@ -19,6 +20,11 @@ export default function SignUpPage() {
           </p>
         </header>
         <SignUpForm />
+        <AuthSwitch
+          prompt="Já tem conta?"
+          href="/auth/sign-in"
+          label="Entrar"
+        />
       </section>
 
       <GradedReviewSample />

@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Conta criada",
@@ -29,8 +32,17 @@ export default function SignUpSuccessPage() {
       </h1>
       <p className="mt-3 text-lg leading-relaxed text-muted-foreground">
         Tudo certo com o seu cadastro. Quando usar um produto, volte aqui e dê a
-        sua nota de 0 a 10.
+        sua nota de 0 a 5.
       </p>
+      <Link
+        href="/auth/sign-in"
+        className={cn(
+          buttonVariants({ size: "lg" }),
+          "mt-8 h-12 w-full rounded-md text-base font-semibold",
+        )}
+      >
+        Entrar na sua conta
+      </Link>
     </section>
   );
 }
