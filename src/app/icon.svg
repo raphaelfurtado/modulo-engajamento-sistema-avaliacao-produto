@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Ícone da Prova: a etiqueta de nota em miniatura (verde, amarela e vermelha), como no logotipo. -->
+  <rect width="32" height="32" rx="6" fill="#17201B"/>
+  <path d="M6 6.5h9.5l2.5 2.75-2.5 2.75H6z" fill="#3FA864"/>
+  <path d="M6 13.25h13.5l2.5 2.75-2.5 2.75H6z" fill="#E3C62C"/>
+  <path d="M6 20h17.5l2.5 2.75-2.5 2.75H6z" fill="#E0412A"/>
+</svg>

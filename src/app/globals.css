@@ -115,6 +115,39 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /*
+   * Mãozinha em tudo que é clicável. O Tailwind 4 tirou o cursor: pointer
+   * padrão dos botões; aqui ele volta para botões, links, itens de menu e
+   * opções de formulário. Desabilitado mostra que não dá para clicar.
+   */
+  a[href],
+  button,
+  summary,
+  select,
+  [role="button"],
+  [role="menuitem"],
+  [role="option"],
+  [role="tab"],
+  [type="submit"],
+  [type="button"],
+  [type="reset"] {
+    cursor: pointer;
+  }
+
+  /* Rótulos que envolvem radio/checkbox (ex.: as casas da nota). */
+  label:has(> [type="radio"]) {
+    cursor: pointer;
+  }
+
+  label:has(> [type="checkbox"]) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
 }
 
 /* Archivo expandida: títulos, números e a marca. */
