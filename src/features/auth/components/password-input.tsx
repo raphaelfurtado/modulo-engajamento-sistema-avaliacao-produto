@@ -25,7 +25,7 @@ export function PasswordInput({
         aria-label={visible ? "Ocultar senha" : "Mostrar senha"}
         aria-pressed={visible}
         disabled={props.disabled}
-        className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-md text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:text-ink disabled:opacity-50"
+        className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-md text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:text-primary disabled:opacity-50"
       >
         <Icon className="size-[1.125rem]" />
       </button>

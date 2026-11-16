@@ -3,6 +3,7 @@
 import { LogOutIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { InitialsAvatar, initialsOf } from "@/components/prova/initials-avatar";
 import {
   Menu,
   MenuContent,
@@ -12,16 +13,12 @@ import {
 } from "@/components/ui/menu";
 import { signOutRequest } from "@/features/auth/sign-in/api";
 import type { SessionUser } from "@/server/auth/session";
-import { UserAvatar } from "./user-avatar";
 
 type AccountMenuProps = {
-  user: Pick<SessionUser, "firstName" | "lastName" | "email" | "avatarUrl">;
+  user: Pick<SessionUser, "firstName" | "lastName" | "email">;
 };
 
-/**
- * Conta no cabeçalho. No mobile só o avatar aparece e o menu mostra nome e
- * e-mail; do `sm` para cima, nome e e-mail ficam ao lado do avatar.
- */
+/** Conta no cabeçalho: um círculo com as iniciais; nome e e-mail ficam no menu. */
 export function AccountMenu({ user }: AccountMenuProps) {
   const router = useRouter();
   const [isSigningOut, startSignOut] = useTransition();
@@ -44,25 +41,21 @@ export function AccountMenu({ user }: AccountMenuProps) {
     <Menu>
       <MenuTrigger
         aria-label={`Conta de ${fullName}`}
-        className="-mr-1 flex min-h-11 min-w-11 items-center justify-center gap-3 rounded-lg px-1 transition-colors hover:bg-muted data-popup-open:bg-muted sm:-mr-2 sm:pl-3 sm:pr-2"
+        className="rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
       >
-        <span className="hidden min-w-0 text-right leading-tight sm:block">
-          <span className="block max-w-56 truncate text-[0.9375rem] font-medium">
-            {fullName}
-          </span>
-          <span className="block max-w-56 truncate text-sm text-muted-foreground">
-            {user.email}
-          </span>
-        </span>
-        <UserAvatar src={user.avatarUrl} />
+        <InitialsAvatar
+          initials={initialsOf(user.firstName, user.lastName)}
+          tone="solid"
+          className="size-11 text-[0.8125rem]"
+        />
       </MenuTrigger>
 
       <MenuContent>
-        <div className="px-3 pt-2 pb-2.5 sm:hidden">
+        <div className="px-3 pt-2 pb-2.5">
           <p className="truncate font-medium">{fullName}</p>
           <p className="truncate text-sm text-muted-foreground">{user.email}</p>
         </div>
-        <MenuSeparator className="sm:hidden" />
+        <MenuSeparator />
         <MenuItem
           onClick={signOut}
           disabled={isSigningOut}

@@ -1,6 +1,7 @@
 import "server-only";
 import { jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { cache } from "react";
 import { getSupabase } from "@/server/db/supabase";
 import { getSessionSecret } from "@/server/env";
@@ -86,6 +87,10 @@ export const getCurrentUser = cache(async (): Promise<SessionUser | null> => {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   if (!token) return null;
 
+  // Validar o token compara a expiração com a hora atual, e o Next proíbe
+  // ler a hora durante o prerender (o App Shell do partialPrefetching resolve
+  // cookies). connection() adia o resto para a requisição real.
+  await connection();
   const accountId = await readAccountId(token);
   if (!accountId) return null;
 
@@ -97,6 +102,12 @@ export const getCurrentUser = cache(async (): Promise<SessionUser | null> => {
     .maybeSingle();
 
   if (error) {
+    // O Next cancela renders em andamento (navegação, refresh, prerender em
+    // dev). O Supabase devolve esse cancelamento como `error`, e um Error comum
+    // seria registrado como falha. Com name "AbortError" o Next o ignora.
+    if (error.message.startsWith("AbortError")) {
+      throw new DOMException(error.message, "AbortError");
+    }
     throw new Error(`Falha ao ler a sessão: ${error.message}`, {
       cause: error,
     });

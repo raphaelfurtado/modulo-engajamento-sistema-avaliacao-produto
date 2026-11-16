@@ -14,12 +14,20 @@ export type ProductDetails = Pick<ProductRow, "id" | "name" | "description"> & {
   externalLink: string;
 };
 
+/** Resumo das avaliações gerado por IA (null enquanto não houver). */
+export type ProductAiSummary = {
+  text: string;
+  /** Quantas avaliações o resumo considerou. */
+  feedbackCount: number;
+};
+
 export type ProductWithFeedbacks = {
   product: ProductDetails;
   /** Mais recentes primeiro. */
   feedbacks: ProductFeedback[];
   /** Média das notas (D2: calculada aqui, sem trigger), ou null sem avaliações. */
   average: number | null;
+  aiSummary: ProductAiSummary | null;
 };
 
 /** Ids são nanoid; qualquer coisa muito longa nem vai ao banco. */
@@ -42,7 +50,9 @@ export async function getProductWithFeedbacks(
   const [productResult, feedbacksResult] = await Promise.all([
     supabase
       .from("products")
-      .select("id, name, description, image_url, external_link")
+      .select(
+        "id, name, description, image_url, external_link, ai_summary, ai_summary_feedback_count",
+      )
       .eq("id", id)
       .maybeSingle(),
     supabase
@@ -85,5 +95,11 @@ export async function getProductWithFeedbacks(
     },
     feedbacks,
     average,
+    aiSummary: row.ai_summary
+      ? {
+          text: row.ai_summary,
+          feedbackCount: row.ai_summary_feedback_count ?? feedbacks.length,
+        }
+      : null,
   };
 }

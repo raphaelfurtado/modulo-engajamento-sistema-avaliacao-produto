@@ -5,7 +5,10 @@ import type {
   ListProductsInput,
 } from "@/features/products/schema";
 import { jsonError, trpcErrorToResponse } from "@/server/http";
-import { isValidAdminKey } from "@/server/products/admin-key";
+import {
+  isValidProductsApiKey,
+  PRODUCTS_API_KEY_HEADER,
+} from "@/server/products/api-key";
 import { PRODUCTS_CACHE_TAG } from "@/server/products/list";
 import { createCaller } from "@/server/trpc/root";
 
@@ -27,22 +30,18 @@ export async function GET(request: NextRequest) {
   }
 }
 
-/** POST /api/v1/products — cadastra um produto. Exige o header `x-admin-key` (D4). */
+/**
+ * POST /api/v1/products — cadastra um produto.
+ * Exige o header `x-api-key` com a PRODUCTS_API_KEY (usado pelo n8n e pelo seed).
+ * Body: `{ "name": string, "link": url http(s), "image": url https }`.
+ */
 export async function POST(request: NextRequest) {
-  let authorized: boolean;
-  try {
-    authorized = isValidAdminKey(request.headers.get("x-admin-key"));
-  } catch (error) {
-    // ADMIN_API_KEY ausente no servidor.
-    console.error(error);
+  if (!isValidProductsApiKey(request.headers.get(PRODUCTS_API_KEY_HEADER))) {
     return jsonError(
-      500,
-      "INTERNAL_SERVER_ERROR",
-      "Cadastro de produtos indisponível no momento.",
+      401,
+      "UNAUTHORIZED",
+      `Envie a chave de cadastro no header ${PRODUCTS_API_KEY_HEADER}.`,
     );
-  }
-  if (!authorized) {
-    return jsonError(401, "UNAUTHORIZED", "Chave de administrador inválida.");
   }
 
   let body: unknown;

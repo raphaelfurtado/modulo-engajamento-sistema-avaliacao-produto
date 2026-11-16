@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Grade } from "@/components/prova/grade";
 import {
   authorDisplayName,
@@ -14,10 +13,7 @@ type FeedbackItemProps = {
   fullDate: string;
 };
 
-/**
- * Uma resposta corrigida: a nota à mão na margem da folha e o comentário à
- * direita, separados das demais só pelas linhas da pauta.
- */
+/** Uma avaliação: o selo da nota à esquerda, quem escreveu e o comentário. */
 export function FeedbackItem({
   feedback,
   relativeDate,
@@ -31,37 +27,23 @@ export function FeedbackItem({
       id={elementId}
       tabIndex={-1}
       aria-labelledby={authorId}
-      className="grid scroll-mt-24 grid-cols-[3.5rem_minmax(0,1fr)] outline-none focus-visible:ring-3 focus-visible:ring-ring/50 sm:grid-cols-[5rem_minmax(0,1fr)] [&:focus]:bg-ink/[0.04]"
+      className="grid scroll-mt-24 grid-cols-[auto_minmax(0,1fr)] gap-4 px-4 py-6 outline-none focus-visible:ring-3 focus-visible:ring-ring/50 sm:gap-5 sm:px-6 [&:focus]:bg-muted/60"
     >
-      {/* Margem do caderno: a nota fica aqui, como na correção do professor. */}
-      <div className="flex justify-center border-r border-pauta pt-4">
-        <Grade value={feedback.score} size="sm" />
-      </div>
-
-      <div className="min-w-0 py-5 pl-4 sm:pl-6">
-        <header className="flex items-center gap-3">
-          <Image
-            src={feedback.author.avatarUrl}
-            alt=""
-            width={36}
-            height={36}
-            unoptimized
-            className="size-9 shrink-0 rounded-full border bg-muted"
-          />
-          <div className="leading-tight">
-            <p id={authorId} className="font-semibold">
-              {authorDisplayName(feedback.author)}
-            </p>
-            <time
-              dateTime={feedback.createdAt}
-              title={fullDate}
-              className="text-sm text-muted-foreground"
-            >
-              {relativeDate}
-            </time>
-          </div>
+      <Grade value={feedback.score} size="md" />
+      <div className="min-w-0">
+        <header className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+          <p id={authorId} className="font-semibold">
+            {authorDisplayName(feedback.author)}
+          </p>
+          <time
+            dateTime={feedback.createdAt}
+            title={fullDate}
+            className="text-sm text-muted-foreground"
+          >
+            {relativeDate}
+          </time>
         </header>
-        <p className="mt-3 max-w-[65ch] text-pretty break-words whitespace-pre-line leading-7">
+        <p className="mt-2 max-w-[68ch] leading-7 text-pretty break-words whitespace-pre-line">
           {feedback.comment}
         </p>
       </div>

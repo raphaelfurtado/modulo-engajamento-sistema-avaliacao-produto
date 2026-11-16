@@ -19,14 +19,12 @@ Precisamos impementação o fluxo para permitir pessoas acessar a plataforma:
    2. `400`: Má formatação de dados
    3. `401`: Falha de credenciais
 6. Se a pessoa não está logada precisamos mostrar um botào de login no cabeçalho
-7. Se a pessoa está logada podemos mostrar um avatar com nome + sobrenome e email
-   1. Você pode Dicebar (https://www.dicebear.com/) utilizar para mockup de avatars
+7. Se a pessoa está logada mostramos um círculo com as iniciais (nome + sobrenome); ao abrir, o menu mostra nome completo, e-mail e "Sair"
 
 ## Requisitos não funcionais
-- UI/UX: Boa experiência de uso através de uma interface bonita, elegante, moderna
-  - Utilize suas habilidades (skill) de front-end design
-  - VocÊ é um design export com anos de experiência
-  - Você é o melhor design
+- UI/UX: segue o design system "Etiqueta de teste" (`specs/design-system.md`), feito com a skill de front-end design.
+  - Cabeçalho da plataforma: faixa branca com o logotipo à esquerda e "Entrar" (ou a conta) à direita.
+  - Página `/auth/sign-in`: só o formulário, sem painel ao lado (entrar precisa ser mais rápido que se cadastrar): título em Archivo expandida, campos de 44px, botão verde de 48px. Layout ancorado no topo, para mensagens de erro não fazerem o título pular.
 - Performance: O processo de criação de conta precisa ser rápido
 
 ## Você deve

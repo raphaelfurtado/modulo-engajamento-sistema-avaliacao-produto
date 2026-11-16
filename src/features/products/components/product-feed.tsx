@@ -54,11 +54,11 @@ export function ProductFeed({ initialPage }: { initialPage: ProductsPage }) {
 
   if (products.length === 0) {
     return (
-      <section className="max-w-md rounded-md border border-border bg-card p-6 sm:p-8">
-        <h2 className="text-xl font-semibold tracking-[-0.015em]">
+      <section className="max-w-md bg-muted p-6 sm:p-8">
+        <h2 className="font-wide text-xl font-extrabold tracking-[-0.02em]">
           Ainda não há produtos avaliados.
         </h2>
-        <p className="ruled-paper mt-2 text-[0.9375rem] leading-8 text-muted-foreground">
+        <p className="mt-2 text-[0.9375rem] leading-relaxed text-muted-foreground">
           Assim que um produto for cadastrado, ele aparece aqui para receber
           avaliações. Volte em breve.
         </p>

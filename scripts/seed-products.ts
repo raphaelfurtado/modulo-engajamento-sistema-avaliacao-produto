@@ -5,8 +5,8 @@
  *   bun scripts/seed-products.ts
  *
  * Variáveis de ambiente (o Bun já carrega o .env.local):
- *   ADMIN_API_KEY  obrigatória, enviada no header x-admin-key
- *   SEED_BASE_URL  opcional, padrão http://localhost:3000
+ *   PRODUCTS_API_KEY  obrigatória, enviada no header x-api-key
+ *   SEED_BASE_URL     opcional, padrão http://localhost:3000
  *
  * As imagens vêm de um serviço de placeholder (picsum.photos). Troque por fotos reais depois.
  */
@@ -133,7 +133,6 @@ const baseUrl = (process.env.SEED_BASE_URL ?? "http://localhost:3000").replace(
   /\/+$/,
   "",
 );
-const adminKey = process.env.ADMIN_API_KEY;
 
 function slugify(value: string): string {
   return value
@@ -145,23 +144,20 @@ function slugify(value: string): string {
 }
 
 async function main() {
-  if (!adminKey) {
-    console.error("Defina ADMIN_API_KEY no ambiente (ou no .env.local).");
-    process.exit(1);
-  }
-
   let created = 0;
   // Em sequência: cada produto ganha um created_at diferente, na ordem da lista.
   for (const product of products) {
     const slug = slugify(product.name);
     const response = await fetch(`${baseUrl}/api/v1/products`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.PRODUCTS_API_KEY ?? "",
+      },
       body: JSON.stringify({
         name: product.name,
-        description: product.description,
-        imageUrl: `https://picsum.photos/seed/prova-${slug}/1200/900`,
-        externalLink: `https://example.com/produtos/${slug}`,
+        link: `https://example.com/produtos/${slug}`,
+        image: `https://picsum.photos/seed/prova-${slug}/1200/900`,
       }),
     });
 
@@ -172,7 +168,6 @@ async function main() {
       console.error(
         `erro ${response.status} ${product.name}: ${await response.text()}`,
       );
-      if (response.status === 401) process.exit(1);
     }
   }
 

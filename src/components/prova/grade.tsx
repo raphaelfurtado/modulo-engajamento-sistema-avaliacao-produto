@@ -3,7 +3,19 @@ import { cn } from "@/lib/utils";
 /** Nota máxima da Prova (D1: escala de 0 a 5). */
 export const MAX_GRADE = 5;
 
+/** As notas possíveis, de 0 a 5. */
+export const GRADES = Array.from(
+  { length: MAX_GRADE + 1 },
+  (_, grade) => grade,
+);
+
 const gradeFormatter = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 1,
+});
+
+const averageFormatter = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 1,
   maximumFractionDigits: 1,
 });
 
@@ -12,76 +24,68 @@ export function formatGrade(value: number): string {
   return gradeFormatter.format(Math.round(value * 10) / 10);
 }
 
+/** Formata uma média sempre com uma casa: 4 → "4,0", 4.25 → "4,3". */
+export function formatAverage(value: number): string {
+  return averageFormatter.format(Math.round(value * 10) / 10);
+}
+
+/**
+ * Fundo e cor do número de cada nota na escala (índice = nota).
+ * Número branco no 0 e no 5, tinta escura do 1 ao 4 (contraste ≥ 4,5:1).
+ * Classes escritas por extenso para o Tailwind encontrá-las.
+ */
+export const GRADE_COLORS = [
+  "bg-nota-0 text-white",
+  "bg-nota-1 text-[#17201b]",
+  "bg-nota-2 text-[#17201b]",
+  "bg-nota-3 text-[#17201b]",
+  "bg-nota-4 text-[#17201b]",
+  "bg-nota-5 text-white",
+] as const;
+
+/** Cor da nota (médias usam a nota inteira mais próxima). */
+export function gradeColor(value: number): string {
+  const index = Math.min(MAX_GRADE, Math.max(0, Math.round(value)));
+  return GRADE_COLORS[index];
+}
+
 const sizes = {
-  sm: { box: "h-11 w-12", text: "text-[1.75rem]" },
-  md: { box: "h-16 w-20", text: "text-[2.75rem]" },
-  lg: {
-    box: "h-24 w-28 sm:h-32 sm:w-36",
-    text: "text-[3.75rem] sm:text-[5rem]",
-  },
+  sm: "size-9 text-base",
+  md: "size-12 text-xl",
+  lg: "h-16 min-w-16 px-2 text-[1.75rem] sm:h-20 sm:min-w-20 sm:text-[2.25rem]",
 } as const;
 
 type GradeProps = {
   value: number;
   size?: keyof typeof sizes;
-  /** Desenha o círculo de caneta em volta da nota. */
-  circled?: boolean;
-  /** Anima o traço do círculo uma vez (use só no elemento de destaque da tela). */
-  animated?: boolean;
+  /** Média: sempre com uma casa decimal ("4,0"). */
+  average?: boolean;
   className?: string;
 };
 
 /**
- * Nota "corrigida à mão" em caneta azul (Nanum Pen Script).
- * Caneta azul é reservada para notas, foco e links.
+ * Selo de nota: o número em Archivo expandida sobre a cor da escala.
+ * A cor nunca aparece sozinha: o número está sempre dentro.
  */
 export function Grade({
   value,
   size = "md",
-  circled = false,
-  animated = false,
+  average = false,
   className,
 }: GradeProps) {
-  const label = formatGrade(value);
+  const label = average ? formatAverage(value) : formatGrade(value);
   return (
-    <div
+    <span
       className={cn(
-        "grid shrink-0 place-items-center text-ink",
-        sizes[size].box,
+        "inline-flex shrink-0 items-center justify-center rounded-sm font-wide leading-none font-extrabold tabular-nums",
+        gradeColor(value),
+        sizes[size],
         className,
       )}
     >
-      <span className="sr-only">
-        Nota {label} de {MAX_GRADE}
-      </span>
-      <span
-        aria-hidden="true"
-        className={cn(
-          "col-start-1 row-start-1 -rotate-6 font-hand leading-none",
-          sizes[size].text,
-        )}
-      >
-        {label}
-      </span>
-      {circled && (
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 120 100"
-          fill="none"
-          className="col-start-1 row-start-1 size-full"
-        >
-          {/* Círculo feito à mão: não fecha perfeitamente e passa do ponto inicial. */}
-          <path
-            pathLength={1}
-            className={animated ? "ink-stroke" : undefined}
-            d="M78 12C42 4 10 22 9 50c-1 28 30 44 60 41 30-3 46-24 42-48C107 19 84 7 54 13"
-            stroke="currentColor"
-            strokeWidth={3}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      )}
-    </div>
+      <span className="sr-only">Nota </span>
+      {label}
+      <span className="sr-only"> de {MAX_GRADE}</span>
+    </span>
   );
 }

@@ -10,7 +10,7 @@ export async function createProduct(data: CreateProductData): Promise<Product> {
     .insert({
       id: nanoid(),
       name: data.name,
-      description: data.description ?? null,
+      description: null,
       image_url: data.imageUrl,
       external_link: data.externalLink,
     })

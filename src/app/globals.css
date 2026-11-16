@@ -6,9 +6,8 @@
 @custom-variant dark (@media (prefers-color-scheme: dark));
 
 @theme inline {
-  --font-sans: var(--font-schibsted);
-  --font-heading: var(--font-schibsted);
-  --font-hand: var(--font-pen);
+  --font-sans: var(--font-archivo);
+  --font-heading: var(--font-archivo);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -28,8 +27,15 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-ink: var(--ink);
   --color-pauta: var(--pauta);
+
+  /* Escala de notas: a única cor da interface, sempre com o número junto. */
+  --color-nota-0: var(--nota-0);
+  --color-nota-1: var(--nota-1);
+  --color-nota-2: var(--nota-2);
+  --color-nota-3: var(--nota-3);
+  --color-nota-4: var(--nota-4);
+  --color-nota-5: var(--nota-5);
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -38,56 +44,63 @@
 }
 
 /*
- * Paleta Prova
- * Sulfite #F5F6F8 · Grafite #2B2F36 · Caneta azul #2340B0
- * Caneta vermelha #C62828 · Pauta #CBD5E6 · Cinza nota #5D6470
+ * Paleta Prova: "etiqueta de teste"
+ * Papel #F6F7F5 · Tinta #17201B · Cinza #56605A · Linha #DDE2DE
+ * Verde-selo #0E6B3B (ações e foco)
+ * Escala 0→5: #C4321F #E2632A #EFA12A #E3C62C #86B83C #187A3E
+ * Números sobre a escala: branco no 0 e no 5, tinta do 1 ao 4.
  */
 :root {
-  --background: #f5f6f8; /* Sulfite */
-  --foreground: #2b2f36; /* Grafite */
+  --background: #f6f7f5;
+  --foreground: #17201b;
   --card: #ffffff;
-  --card-foreground: #2b2f36;
+  --card-foreground: #17201b;
   --popover: #ffffff;
-  --popover-foreground: #2b2f36;
-  --primary: #2b2f36;
-  --primary-foreground: #f5f6f8;
-  --secondary: #e9ecf1;
-  --secondary-foreground: #2b2f36;
-  --muted: #e9ecf1;
-  --muted-foreground: #5d6470; /* Cinza nota */
-  --accent: #e9ecf1;
-  --accent-foreground: #2b2f36;
-  --destructive: #c62828; /* Caneta vermelha: só erros */
-  --border: #d9dfe9;
-  --input: #8792a8; /* borda de campo com contraste 3:1 */
-  --ring: #2340b0;
-  --ink: #2340b0; /* Caneta azul: só anotações (nota, foco, links) */
-  --pauta: #cbd5e6; /* Linhas de caderno */
-  --radius: 0.5rem;
+  --popover-foreground: #17201b;
+  --primary: #0e6b3b;
+  --primary-foreground: #ffffff;
+  --secondary: #eceeeb;
+  --secondary-foreground: #17201b;
+  --muted: #eceeeb;
+  --muted-foreground: #56605a;
+  --accent: #eceeeb;
+  --accent-foreground: #17201b;
+  --destructive: #b42318;
+  --border: #dde2de;
+  --input: #87918b; /* borda de campo com contraste 3:1 */
+  --ring: #0e6b3b;
+  --pauta: #dde2de;
+  --radius: 0.25rem;
+
+  --nota-0: #c4321f;
+  --nota-1: #e2632a;
+  --nota-2: #efa12a;
+  --nota-3: #e3c62c;
+  --nota-4: #86b83c;
+  --nota-5: #187a3e;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #181a1e;
-    --foreground: #e9ebef;
-    --card: #20232a;
-    --card-foreground: #e9ebef;
-    --popover: #20232a;
-    --popover-foreground: #e9ebef;
-    --primary: #e9ebef;
-    --primary-foreground: #181a1e;
-    --secondary: #2a2e36;
-    --secondary-foreground: #e9ebef;
-    --muted: #2a2e36;
-    --muted-foreground: #a3aab7;
-    --accent: #2a2e36;
-    --accent-foreground: #e9ebef;
-    --destructive: #ff7a72;
-    --border: #343a46;
-    --input: #6b7487;
-    --ring: #8ea4ff;
-    --ink: #8ea4ff;
-    --pauta: #2f3a52;
+    --background: #101512;
+    --foreground: #e8ece9;
+    --card: #171d19;
+    --card-foreground: #e8ece9;
+    --popover: #171d19;
+    --popover-foreground: #e8ece9;
+    --primary: #5bc98a;
+    --primary-foreground: #101512;
+    --secondary: #1f2622;
+    --secondary-foreground: #e8ece9;
+    --muted: #1f2622;
+    --muted-foreground: #9aa59f;
+    --accent: #1f2622;
+    --accent-foreground: #e8ece9;
+    --destructive: #ff8a7a;
+    --border: #2a322d;
+    --input: #6b766f;
+    --ring: #5bc98a;
+    --pauta: #2a322d;
   }
 }
 
@@ -104,34 +117,42 @@
   }
 }
 
-/* Linhas de caderno: uma pauta a cada 2rem, alinhada ao leading-8 do texto. */
-@utility ruled-paper {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent calc(2rem - 1px),
-    var(--pauta) calc(2rem - 1px),
-    var(--pauta) 2rem
+/* Archivo expandida: títulos, números e a marca. */
+@utility font-wide {
+  font-stretch: 125%;
+}
+
+/* Ponta de seta da barra da etiqueta (como nas etiquetas de eletrodomésticos). */
+@utility bar-arrow {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 0.875rem) 0,
+    100% 50%,
+    calc(100% - 0.875rem) 100%,
+    0 100%
   );
 }
 
-/* Traço de caneta: o SVG se desenha uma única vez ao carregar. */
-@keyframes ink-draw {
+/* Seta da média, apontando para a barra da esquerda. */
+@utility tag-arrow {
+  clip-path: polygon(0.875rem 0, 100% 0, 100% 100%, 0.875rem 100%, 0 50%);
+}
+
+/* O único movimento da tela: as barras da etiqueta crescem ao carregar. */
+@keyframes bar-grow {
   from {
-    stroke-dashoffset: 1;
+    transform: scaleX(0);
   }
   to {
-    stroke-dashoffset: 0;
+    transform: scaleX(1);
   }
 }
 
-@utility ink-stroke {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: ink-draw 700ms cubic-bezier(0.65, 0, 0.35, 1) 350ms forwards;
+@utility animate-bar-grow {
+  transform-origin: left center;
+  animation: bar-grow 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
-    stroke-dashoffset: 0;
   }
 }

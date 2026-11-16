@@ -1,6 +1,7 @@
 import { getCurrentUser } from "@/server/auth/session";
 import { AlreadyReviewed } from "./already-reviewed";
 import { FeedbackForm } from "./feedback-form";
+import { ReviewLayout } from "./review-layout";
 import { SignInToReview } from "./sign-in-to-review";
 
 type ReviewSectionProps = {
@@ -10,8 +11,8 @@ type ReviewSectionProps = {
 };
 
 /**
- * Bloco "nova avaliação". Lê a sessão (cookies), então a página o renderiza
- * dentro de <Suspense>: produto e avaliações aparecem sem esperar por ele.
+ * Bloco "Avalie este produto", no fim da página. Lê a sessão (cookies),
+ * então a página o renderiza dentro de <Suspense>.
  */
 export async function ReviewSection({
   productId,
@@ -24,18 +25,12 @@ export async function ReviewSection({
   if (own) return <AlreadyReviewed feedbackId={own.id} score={own.score} />;
 
   return (
-    <div className="rounded-lg border bg-card p-5 sm:p-8">
-      <h2
-        id="nova-avaliacao"
-        className="text-xl font-bold tracking-[-0.015em] sm:text-2xl"
-      >
-        Avalie este produto
-      </h2>
-      <p className="mt-2 mb-7 max-w-[60ch] text-muted-foreground">
-        Sua avaliação aparece com seu primeiro nome e a inicial do sobrenome.
-      </p>
+    <ReviewLayout
+      title="Avalie este produto"
+      description="Sua nota entra na etiqueta e na média. A avaliação aparece com seu primeiro nome e a inicial do sobrenome."
+    >
       <FeedbackForm productId={productId} />
-    </div>
+    </ReviewLayout>
   );
 }
 
@@ -44,7 +39,7 @@ export function ReviewSectionSkeleton() {
   return (
     <div
       aria-hidden="true"
-      className="h-56 rounded-lg border bg-card motion-safe:animate-pulse"
+      className="h-48 rounded-lg border bg-card motion-safe:animate-pulse"
     />
   );
 }

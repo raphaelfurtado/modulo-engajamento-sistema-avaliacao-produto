@@ -28,32 +28,40 @@ const httpUrl = z.url({
   error: "Informe uma URL http ou https válida.",
 });
 
-/** Body do POST /api/v1/products (cadastro manual, protegido por x-admin-key). */
-export const createProductSchema = z.object({
-  name: z
-    .string("Informe o nome do produto.")
-    .trim()
-    .min(1, "Informe o nome do produto.")
-    .max(120, "Use no máximo 120 caracteres."),
-  description: z
-    .string()
-    .trim()
-    .max(500, "Use no máximo 500 caracteres.")
-    .optional()
-    // Descrição vazia vira ausência de descrição.
-    .transform((value) => (value ? value : undefined)),
-  externalLink: z.string("Informe o link do produto.").trim().pipe(httpUrl),
-  // As imagens passam pelo next/image, que só aceita origens https (next.config.ts).
-  imageUrl: z
-    .string("Informe a URL da imagem.")
-    .trim()
-    .pipe(
-      z.url({
-        protocol: /^https$/,
-        error: "Informe uma URL https válida para a imagem.",
-      }),
-    ),
-});
+/**
+ * Body do POST /api/v1/products (público, sem autenticação).
+ * `{ name, link, image }` vira `{ name, externalLink, imageUrl }`
+ * (colunas name, external_link, image_url).
+ */
+export const createProductSchema = z
+  .object({
+    name: z
+      .string("Informe o nome do produto.")
+      // Nomes raspados de lojas trazem quebras de linha e espaços repetidos.
+      .transform((value) => value.replace(/\s+/g, " ").trim())
+      .pipe(
+        z
+          .string()
+          .min(1, "Informe o nome do produto.")
+          .max(200, "Use no máximo 200 caracteres."),
+      ),
+    link: z.string("Informe o link do produto.").trim().pipe(httpUrl),
+    // As imagens passam pelo next/image, que só aceita origens https (next.config.ts).
+    image: z
+      .string("Informe a URL da imagem.")
+      .trim()
+      .pipe(
+        z.url({
+          protocol: /^https$/,
+          error: "Informe uma URL https válida para a imagem.",
+        }),
+      ),
+  })
+  .transform(({ name, link, image }) => ({
+    name,
+    externalLink: link,
+    imageUrl: image,
+  }));
 
 export type CreateProductInput = z.input<typeof createProductSchema>;
 export type CreateProductData = z.output<typeof createProductSchema>;

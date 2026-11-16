@@ -31,7 +31,9 @@ Precisamos implementar o fluxo para a criação de contas na plataforma, as pess
 ## Requisitos Não Funcionais
 - Segurança: Precisamos salvar as senhas de forma segura no banco de dados.
     - Precisamos receber os dados dos clientes de forma segura usando HTTPS (para prefinir network sniff)
-- UI/UX: Boa experiência de uso através de uma interface bonita, elegante, moderna
+- UI/UX: segue o design system "Etiqueta de teste" (`specs/design-system.md`).
+  - Página `/auth/sign-up`: formulário à esquerda (nome e sobrenome lado a lado, regras da senha visíveis antes do erro, botão verde de 48px); à direita, a etiqueta de nota de um produto de exemplo (air fryer), a mesma que aparece na página de cada produto.
+  - Página `/auth/sign-up/success`: marca de "certo" em verde-selo, título "Conta criada" e o botão "Entrar na sua conta".
 - Performance: O processo de criação de conta precisa ser rápido
 
 ## Você deve

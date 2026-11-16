@@ -48,8 +48,8 @@ export function FeedbackForm({ productId }: { productId: string }) {
       { ...data, productId },
       {
         onSuccess: (feedback) => {
-          // A página volta do servidor com a avaliação no topo da lista e este
-          // bloco vira "Você já avaliou"; o foco vai para a avaliação publicada.
+          // A página volta do servidor com a avaliação na lista e este bloco
+          // vira "Você deu nota N"; o foco vai para a avaliação publicada.
           rememberPublishedFeedback(feedback.id);
           startTransition(() => router.refresh());
         },
@@ -70,11 +70,11 @@ export function FeedbackForm({ productId }: { productId: string }) {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
-      <FieldGroup className="gap-7">
+      <FieldGroup className="gap-6">
         {createFeedback.isError && (
           <Alert
             variant="destructive"
-            className="rounded-md border-destructive/40 bg-destructive/[0.06] px-3.5 py-3"
+            className="border-destructive/40 bg-destructive/[0.06] px-3.5 py-3"
           >
             <CircleAlertIcon />
             <AlertTitle>Não foi possível publicar sua avaliação</AlertTitle>
@@ -90,10 +90,7 @@ export function FeedbackForm({ productId }: { productId: string }) {
               data-invalid={fieldState.invalid}
               className="flex flex-col gap-2.5"
             >
-              <span
-                id="feedback-score-label"
-                className="text-[0.9375rem] font-medium"
-              >
+              <span id="feedback-score-label" className="font-semibold">
                 Sua nota
               </span>
               <ScorePicker
@@ -113,7 +110,7 @@ export function FeedbackForm({ productId }: { productId: string }) {
                   errors={[fieldState.error]}
                 />
               ) : (
-                <FieldDescription id="feedback-score-hint">
+                <FieldDescription id="feedback-score-hint" className="sr-only">
                   De 0 (não recomendo) a 5 (recomendo sem ressalvas).
                 </FieldDescription>
               )}
@@ -131,19 +128,19 @@ export function FeedbackForm({ productId }: { productId: string }) {
             >
               <FieldLabel
                 htmlFor="feedback-comment"
-                className="text-[0.9375rem] font-medium"
+                className="text-base font-semibold"
               >
                 Comentário
               </FieldLabel>
-              {/* Caderno pautado: cada linha de texto cai sobre uma pauta. */}
               <Textarea
                 {...field}
                 id="feedback-comment"
                 rows={5}
+                placeholder="Há quanto tempo você usa? O que surpreendeu? O que incomodou?"
                 aria-invalid={fieldState.invalid}
                 aria-describedby="feedback-comment-hint feedback-comment-count"
                 disabled={isBusy}
-                className="ruled-paper max-h-96 min-h-40 rounded-md bg-card bg-local px-3.5 py-0 text-base leading-8 md:text-base dark:bg-card"
+                className="max-h-96 min-h-36 bg-card px-3.5 py-3 text-base leading-relaxed md:text-base dark:bg-card"
               />
               <div className="flex items-start justify-between gap-4">
                 {fieldState.error ? (
@@ -153,8 +150,7 @@ export function FeedbackForm({ productId }: { productId: string }) {
                   />
                 ) : (
                   <FieldDescription id="feedback-comment-hint">
-                    Há quanto tempo você usa? O que surpreendeu? O que
-                    incomodou?
+                    Pelo menos 10 caracteres.
                   </FieldDescription>
                 )}
                 <p
@@ -176,7 +172,7 @@ export function FeedbackForm({ productId }: { productId: string }) {
           type="submit"
           size="lg"
           disabled={isBusy}
-          className="h-12 w-full rounded-md text-base font-semibold sm:w-auto sm:self-start sm:px-6"
+          className="h-12 w-full text-base font-semibold sm:w-auto sm:self-start sm:px-6"
         >
           {isBusy && <Spinner aria-label="Publicando" />}
           {isBusy ? "Publicando…" : "Publicar avaliação"}

@@ -15,7 +15,7 @@ export function AuthSwitch({
       {prompt}
       <Link
         href={href}
-        className="inline-flex min-h-11 items-center rounded-sm font-medium text-ink underline decoration-ink/40 underline-offset-4 outline-none transition-colors hover:decoration-ink focus-visible:ring-3 focus-visible:ring-ring/50"
+        className="inline-flex min-h-11 items-center rounded-sm font-medium text-primary underline decoration-primary/40 underline-offset-4 outline-none transition-colors hover:decoration-primary focus-visible:ring-3 focus-visible:ring-ring/50"
       >
         {label}
       </Link>

@@ -22,7 +22,10 @@ Precisamos impementação o fluxo para listagem de produtos
 5. Ao cliar no nome de um produto devemos navegar para os detalhes do mesmo (iremos construir essa pagina em breve)
 
 ## Requisitos não funcionais
-- UI/UX: Boa experiência de uso através de uma interface bonita, elegante, moderna
+- UI/UX: segue o design system "Etiqueta de teste" (`specs/design-system.md`).
+  - Título "Produtos avaliados por quem usou" em Archivo expandida e uma frase explicando a etiqueta de nota.
+  - Grade de cartões brancos (1 coluna no celular, 2 no tablet, 3 no desktop): a foto inteira, sem corte, sobre fundo branco; o nome em Archivo expandida (até 3 linhas) e a descrição (até 2 linhas). O cartão inteiro leva ao produto.
+  - Carregamento: cartões vazios no mesmo formato; ao chegar ao fim da lista, "Você viu todos os produtos".
 - Performance: O processo de criação de conta precisa ser rápido
 
 ## Você deve
@@ -30,7 +33,7 @@ Precisamos impementação o fluxo para listagem de produtos
 - Enriquecer a home existente ou criar uma nova pagina
 - Criar a tabela no banco de dados
 - Criar uma nova migration do Supabase
-- Crier um endpoint para manualmente inserir novos produtos (POST `/products` com name, external_link e imagem)
+- Crier um endpoint para manualmente inserir novos produtos: `POST /api/v1/products`, público, com JSON `{ name, link, image }` (`link` vai para `external_link`, `image` precisa ser `https`; nome de até 200 caracteres)
 
 ## Você não deve
 - Implementar qualquer outra funcionalidade que não esteja relacionada com sign-up (criação de contas).

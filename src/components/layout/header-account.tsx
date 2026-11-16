@@ -14,7 +14,7 @@ export async function HeaderAccount() {
         href="/auth/sign-in"
         className={cn(
           buttonVariants({ variant: "outline" }),
-          "h-11 rounded-md px-5 text-[0.9375rem] font-semibold",
+          "h-11 px-5 text-[0.9375rem] font-semibold",
         )}
       >
         Entrar
@@ -28,7 +28,6 @@ export async function HeaderAccount() {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        avatarUrl: user.avatarUrl,
       }}
     />
   );
@@ -36,5 +35,5 @@ export async function HeaderAccount() {
 
 /** Reserva o espaço da conta enquanto a sessão é lida (evita o layout pular). */
 export function HeaderAccountFallback() {
-  return <div aria-hidden="true" className="h-11 w-11 sm:w-24" />;
+  return <div aria-hidden="true" className="size-11" />;
 }

@@ -7,7 +7,11 @@ const envSchema = z.object({
   // Opcionais no schema para não derrubar o sign-up enquanto não forem preenchidos.
   // Use os getters abaixo, que falham com mensagem clara quando faltam.
   SESSION_SECRET: z.string().min(32).optional(),
-  ADMIN_API_KEY: z.string().min(16).optional(),
+  // Sem a chave, o resumo de IA simplesmente não é gerado.
+  OPENAI_API_KEY: z.string().min(1).optional(),
+  // Chave do header `x-api-key` exigido pelo POST /api/v1/products (n8n, seed).
+  // Sem ela, o cadastro de produtos fica fechado para todos.
+  PRODUCTS_API_KEY: z.string().min(32).optional(),
 });
 
 export type ServerEnv = z.infer<typeof envSchema>;
@@ -35,13 +39,4 @@ export function getSessionSecret(): string {
     throw new Error("SESSION_SECRET não definido no .env.local.");
   }
   return secret;
-}
-
-/** Chave exigida no header `x-admin-key` do POST /api/v1/products. */
-export function getAdminApiKey(): string {
-  const key = getServerEnv().ADMIN_API_KEY;
-  if (!key) {
-    throw new Error("ADMIN_API_KEY não definido no .env.local.");
-  }
-  return key;
 }

@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
-import { Nanum_Pen_Script, Schibsted_Grotesk } from "next/font/google";
+import { Archivo } from "next/font/google";
 import { Providers } from "./providers";
 import "./globals.css";
 
-const schibsted = Schibsted_Grotesk({
-  variable: "--font-schibsted",
+/**
+ * Archivo variável com o eixo de largura: normal no texto e expandida
+ * (`font-wide`) nos títulos, números e na marca.
+ */
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin", "latin-ext"],
-});
-
-// Fonte manuscrita: usada apenas nos números das notas.
-const pen = Nanum_Pen_Script({
-  variable: "--font-pen",
-  weight: "400",
-  subsets: ["latin"],
+  axes: ["wdth"],
 });
 
 export const metadata: Metadata = {
@@ -26,10 +24,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="pt-BR"
-      className={`${schibsted.variable} ${pen.variable} h-full antialiased`}
-    >
+    <html lang="pt-BR" className={`${archivo.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <Providers>{children}</Providers>
       </body>

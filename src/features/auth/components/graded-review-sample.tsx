@@ -1,37 +1,29 @@
-import { Grade } from "@/components/prova/grade";
+import { ScoreLabel } from "@/components/prova/score-label";
+
+/** Exemplo: 12 pessoas avaliaram uma air fryer (índice = nota, de 0 a 5). */
+const SAMPLE_COUNTS = [0, 1, 1, 2, 5, 3];
+const SAMPLE_AVERAGE =
+  SAMPLE_COUNTS.reduce((sum, count, grade) => sum + count * grade, 0) /
+  SAMPLE_COUNTS.reduce((sum, count) => sum + count, 0);
 
 /**
- * Exemplo de avaliação "corrigida": a nota de 0 a 5 escrita à mão e
- * circulada em caneta azul. É o único elemento ousado da página.
+ * A etiqueta de nota de um produto de exemplo, a mesma que aparece na página
+ * de cada produto. É o elemento de destaque das telas de conta.
  */
 export function GradedReviewSample() {
   return (
-    <figure className="w-full max-w-lg justify-self-center lg:justify-self-end">
-      <div className="rounded-lg border bg-card px-6 pt-6 pb-4 sm:px-9 sm:pt-8">
-        <div className="ruled-paper leading-8 sm:text-[1.0625rem]">
-          {/* A nota flutua no canto e o texto a contorna, como numa folha corrigida. */}
-          <Grade
-            value={4.5}
-            size="lg"
-            circled
-            animated
-            className="float-right -mt-3 -mr-2 ml-3 sm:-mt-4 sm:-mr-3"
-          />
-          <p className="font-semibold">Air fryer 4 L</p>
-          <p className="text-muted-foreground">usada há 7 meses</p>
-          <blockquote className="mt-8 text-pretty">
-            Frita bem e é fácil de limpar. O cesto começou a descascar no quinto
-            mês, então eu compraria de novo, mas usaria só esponja macia.
-          </blockquote>
-          <p className="mt-8 text-sm text-muted-foreground">
-            Juliana R., São Paulo
-          </p>
-        </div>
-      </div>
-
-      <figcaption className="mt-3 text-sm text-muted-foreground">
-        Exemplo de avaliação. Na Prova, a nota vai de 0 a 5.
-      </figcaption>
-    </figure>
+    <aside
+      aria-label="Exemplo de etiqueta de nota"
+      className="w-full max-w-md justify-self-center lg:justify-self-end"
+    >
+      <p className="mb-3 font-wide text-lg font-extrabold tracking-[-0.01em]">
+        Air fryer 4 L
+      </p>
+      <ScoreLabel counts={SAMPLE_COUNTS} average={SAMPLE_AVERAGE} animated />
+      <p className="mt-3 text-sm text-muted-foreground">
+        Exemplo. Todo produto na Prova ganha uma etiqueta assim, com as notas de
+        quem usou.
+      </p>
+    </aside>
   );
 }

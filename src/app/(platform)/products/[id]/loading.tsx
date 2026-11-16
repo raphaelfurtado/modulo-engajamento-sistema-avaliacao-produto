@@ -1,41 +1,33 @@
+import { PAGE_CONTAINER } from "@/components/layout/page-container";
+import { cn } from "@/lib/utils";
+
 /** Esqueleto da página do produto enquanto o produto e as avaliações carregam. */
 export default function ProductLoading() {
   const block = "rounded-md bg-muted motion-safe:animate-pulse";
 
   return (
-    <div aria-busy="true" className="flex flex-col gap-14 sm:gap-16">
+    <div aria-busy="true">
       <output className="sr-only">Carregando o produto…</output>
       <div
         aria-hidden="true"
-        className="grid items-start gap-8 md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-14"
+        className={cn(
+          PAGE_CONTAINER,
+          "grid items-start gap-8 pt-8 pb-12 sm:pt-10 lg:grid-cols-2 lg:gap-12",
+        )}
       >
-        <div className={`aspect-[4/3] rounded-lg ${block}`} />
+        <div className={`aspect-[4/3] rounded-lg border ${block}`} />
         <div className="flex flex-col gap-4">
-          <div className={`h-10 w-3/4 ${block}`} />
-          <div className={`h-5 w-full ${block}`} />
-          <div className={`h-5 w-5/6 ${block}`} />
-          <div className={`mt-2 h-5 w-28 ${block}`} />
-          <div className="mt-4 border-t border-pauta pt-6">
-            <div className={`h-24 w-28 rounded-full ${block}`} />
+          <div className={`h-11 w-4/5 ${block}`} />
+          <div className={`h-11 w-3/5 ${block}`} />
+          <div className="mt-2 flex flex-col gap-1.5 rounded-lg border bg-card p-5 sm:p-6">
+            {[44, 54, 64, 74, 84, 94].map((width) => (
+              <div
+                key={width}
+                className={`h-8 sm:h-9 ${block}`}
+                style={{ width: `${width - 10}%` }}
+              />
+            ))}
           </div>
-        </div>
-      </div>
-      <div aria-hidden="true" className="max-w-3xl">
-        <div className={`mb-4 h-8 w-40 ${block}`} />
-        <div className="border-t border-pauta">
-          {[0, 1, 2].map((row) => (
-            <div
-              key={row}
-              className="grid grid-cols-[3.5rem_minmax(0,1fr)] border-b border-pauta sm:grid-cols-[5rem_minmax(0,1fr)]"
-            >
-              <div className="border-r border-pauta" />
-              <div className="flex flex-col gap-3 py-5 pl-4 sm:pl-6">
-                <div className={`h-9 w-40 ${block}`} />
-                <div className={`h-4 w-full ${block}`} />
-                <div className={`h-4 w-2/3 ${block}`} />
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </div>

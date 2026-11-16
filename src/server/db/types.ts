@@ -31,17 +31,27 @@ export type ProductRow = {
   external_link: string;
   /** Mantido como boolean conforme a spec (D2). Sem uso na interface por enquanto. */
   score: boolean;
+  /* supabase/migrations/20261114030000_add_products_ai_summary.sql */
+  /** Resumo das avaliações gerado por IA; null enquanto não houver. */
+  ai_summary: string | null;
+  /** Quantas avaliações o resumo considerou. */
+  ai_summary_feedback_count: number | null;
+  ai_summary_generated_at: string | null;
   created_at: string;
   updated_at: string;
 };
 
-export type ProductInsert = Omit<
-  ProductRow,
-  "description" | "score" | "created_at" | "updated_at"
-> &
-  Partial<
-    Pick<ProductRow, "description" | "score" | "created_at" | "updated_at">
-  >;
+type ProductOptionalColumns =
+  | "description"
+  | "score"
+  | "ai_summary"
+  | "ai_summary_feedback_count"
+  | "ai_summary_generated_at"
+  | "created_at"
+  | "updated_at";
+
+export type ProductInsert = Omit<ProductRow, ProductOptionalColumns> &
+  Partial<Pick<ProductRow, ProductOptionalColumns>>;
 
 /* products_feedbacks: supabase/migrations/20261114020000_create_products_feedbacks.sql */
 export type ProductFeedbackRow = {

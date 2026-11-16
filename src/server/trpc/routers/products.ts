@@ -21,10 +21,7 @@ export const productsRouter = createTRPCRouter({
     }
   }),
 
-  /**
-   * Sem checagem de admin aqui: a rota REST confere o `x-admin-key` antes (D4).
-   * Não exponha esta procedure por HTTP sem proteção equivalente.
-   */
+  /** Cadastro público, sem autenticação (exposto em POST /api/v1/products). */
   create: publicProcedure
     .input(createProductSchema)
     .mutation(({ input }) => createProduct(input)),

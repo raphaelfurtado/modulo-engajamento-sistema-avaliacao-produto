@@ -2,7 +2,7 @@ import { formatDistance } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cacheLife, cacheTag } from "next/cache";
 import type { FeedbackItem as FeedbackItemData } from "../schema";
-import { FeedbackItem } from "./feedback-item";
+import { ReviewGrid } from "./review-grid";
 
 const fullDateFormatter = new Intl.DateTimeFormat("pt-BR", {
   dateStyle: "long",
@@ -30,31 +30,36 @@ export async function FeedbackList({
 
   if (feedbacks.length === 0) {
     return (
-      <p className="border-y border-pauta py-6 text-muted-foreground">
-        Ninguém avaliou este produto ainda. Se você já usou, conte como foi.
-      </p>
+      <>
+        <h2
+          id="avaliacoes"
+          className="font-wide text-2xl font-extrabold tracking-[-0.02em]"
+        >
+          Avaliações
+        </h2>
+        <p className="mt-5 rounded-lg border border-dashed bg-card px-5 py-6 text-muted-foreground">
+          Ninguém avaliou este produto ainda. Se você já usou, conte como foi
+          logo abaixo.
+        </p>
+      </>
     );
   }
 
   const now = new Date();
 
   return (
-    <ol className="border-t border-pauta">
-      {feedbacks.map((feedback) => {
+    <ReviewGrid
+      items={feedbacks.map((feedback) => {
         const createdAt = new Date(feedback.createdAt);
-        return (
-          <li key={feedback.id} className="border-b border-pauta">
-            <FeedbackItem
-              feedback={feedback}
-              relativeDate={formatDistance(createdAt, now, {
-                addSuffix: true,
-                locale: ptBR,
-              })}
-              fullDate={fullDateFormatter.format(createdAt)}
-            />
-          </li>
-        );
+        return {
+          feedback,
+          relativeDate: formatDistance(createdAt, now, {
+            addSuffix: true,
+            locale: ptBR,
+          }),
+          fullDate: fullDateFormatter.format(createdAt),
+        };
       })}
-    </ol>
+    />
   );
 }
