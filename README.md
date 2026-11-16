@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Prova
 
-## Getting Started
+Avaliações de produtos feitas por quem comprou e usou, com nota de 0 a 5.
 
-First, run the development server:
+**Site publicado:** https://modulo-engajamento-sistema-avaliaca-ten.vercel.app
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Cada produto tem uma etiqueta de nota, no formato das etiquetas de eficiência
+dos eletrodomésticos, e um resumo das avaliações gerado por IA.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Next.js 16, React, Tailwind CSS, shadcn/ui, tRPC, React Hook Form, Supabase,
+Mastra (OpenAI `gpt-4o-mini`) e Bun. Deploy na Vercel a cada push no `main`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Rodar localmente
 
-## Learn More
+1. Copie `.env.example` para `.env.local` e preencha as variáveis (o arquivo
+   explica cada uma).
+2. Aplique as migrations de `supabase/migrations/` no seu projeto Supabase.
+3. Instale e rode:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   bun install
+   bun dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. Abra http://localhost:3000.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Cadastro de produtos
 
-## Deploy on Vercel
+`POST /api/v1/products` com o header `x-api-key` (valor de `PRODUCTS_API_KEY`) e
+o corpo `{ "name": "...", "link": "https://...", "image": "https://..." }`.
+Para cadastrar produtos de exemplo: `bun scripts/seed-products.ts`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Documentação
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+As especificações de cada funcionalidade e o design system estão em
+[`specs/`](specs/).
